@@ -1,0 +1,34 @@
+{
+  "azure-sql": {
+    "displayName": "Azure SQL",
+    "items": []
+  },
+  "fabric": {
+    "displayName": "Fabric",
+    "items": []
+  },
+  "foundry": {
+    "displayName": "Foundry",
+    "items": []
+  },
+  "github-copilot": {
+    "displayName": "GitHub Copilot",
+    "items": []
+  },
+  "avd": {
+    "displayName": "AVD",
+    "items": []
+  },
+  "app-platform-services": {
+    "displayName": "App Platform Services",
+    "items": []
+  },
+  "azure-openai": {
+    "displayName": "Azure OpenAI",
+    "items": []
+  },
+  "defender-for-cloud": {
+    "displayName": "Defender for Cloud",
+    "items": []
+  }
+}
