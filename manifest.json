@@ -48,7 +48,12 @@
   },
   "app-platform-services": {
     "displayName": "App Platform Services",
-    "items": []
+    "items": [
+      {
+        "file": "apim-logic-apps-functions-decision-guide.html",
+        "title": "App Platform Services Decision Guide — APIM, Logic Apps, Functions | SME&amp;C"
+      }
+    ]
   },
   "azure-openai": {
     "displayName": "Azure OpenAI",
