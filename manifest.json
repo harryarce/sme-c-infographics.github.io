@@ -37,12 +37,12 @@
     "displayName": "Foundry",
     "items": [
       {
-        "file": "microsoft-ai-decision-guide.html",
-        "title": "Microsoft AI Platform Decision Guide"
-      },
-      {
         "file": "frontier-firm-playbook.html",
         "title": "Become a Frontier Firm — Microsoft's Playbook for the Agentic Enterprise"
+      },
+      {
+        "file": "microsoft-ai-decision-guide.html",
+        "title": "Microsoft AI Platform Decision Guide"
       }
     ]
   },
