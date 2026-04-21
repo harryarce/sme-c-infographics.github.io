@@ -1,20 +1,23 @@
 {
-  "$schema": "./terminology.schema.json",
-  "description": "Data-driven deprecated-terminology map for check-deprecated-terms.py. Each rule has a regex (or literal string), a replacement, and optional case/context guards. Edit this file — not the script — to add/remove rules.",
+  "description": "Data-driven deprecated-terminology map for check-deprecated-terms.py. Each rule has a regex pattern, a replacement, and optional severity. Edit this file -- not the script -- to add/remove rules.",
   "version": 1,
+  "_warnings": [
+    "Running `check-deprecated-terms.py --apply` applies rules in order. Cascading edits can produce awkward output: e.g. 'Azure Active Directory (Azure AD)' becomes 'Microsoft Entra ID (Microsoft Entra ID)' after both AAD rules fire. Review apply output before committing.",
+    "Rules at severity=low require human judgement; they are listed for awareness but should usually be reviewed in context before `--apply`."
+  ],
   "rules": [
     {
-      "id": "azure-ad-to-entra-id",
-      "pattern": "\\bAzure Active Directory\\b",
+      "id": "azure-ad-long-to-entra-id",
+      "pattern": "\\bAzure Active Directory\\b(?:\\s*\\(\\s*Azure AD\\s*\\))?",
       "replacement": "Microsoft Entra ID",
-      "note": "Renamed July 2023. First mention should use 'Microsoft Entra ID (previously Azure Active Directory)' for clarity; automation replaces subsequent mentions.",
+      "note": "Renamed July 2023. Pattern also consumes a trailing '(Azure AD)' parenthetical when present to avoid double-replacement. First mention of the rename should usually be written by hand as 'Microsoft Entra ID (previously Azure Active Directory)'; automation replaces plain occurrences.",
       "severity": "high"
     },
     {
       "id": "azure-ad-short-to-entra-id",
       "pattern": "\\bAzure AD\\b",
       "replacement": "Microsoft Entra ID",
-      "note": "Short form of the old name. Skip cases where it appears immediately after 'Microsoft Entra ID (previously'.",
+      "note": "Short form of the old name. The 'is_already_fixed' guard in the checker skips cases immediately following 'Microsoft Entra ID (previously'.",
       "severity": "high"
     },
     {

@@ -180,7 +180,9 @@ def main() -> int:
     out_path = args.report
     if not os.path.isabs(out_path):
         out_path = os.path.join(REPO_ROOT, out_path)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    out_dir = os.path.dirname(out_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
@@ -192,7 +194,7 @@ def main() -> int:
     for row in broken[:10]:
         refs = ", ".join(row["referenced_in"][:2])
         extra = "" if len(row["referenced_in"]) <= 2 else f" (+{len(row['referenced_in']) - 2} more)"
-        print(f"  BROKEN {row['status']} {row['url']} — in {refs}{extra}")
+        print(f"  BROKEN {row['status']} {row['url']} -- in {refs}{extra}")
     if len(broken) > 10:
         print(f"  ... and {len(broken) - 10} more. See report.")
 

@@ -121,16 +121,12 @@ def apply_to_file(
         match = HEAD_CLOSE_RE.search(content)
         if not match:
             return "missing-anchor", None
-        new_content = _insert_block(
-            content, match, marker, spec["block"], trailing=True
-        )
+        new_content = _insert_block(content, match, marker, spec["block"])
     elif target == "before-body-close":
         match = BODY_CLOSE_RE.search(content)
         if not match:
             return "missing-anchor", None
-        new_content = _insert_block(
-            content, match, marker, spec["block"], trailing=True
-        )
+        new_content = _insert_block(content, match, marker, spec["block"])
     elif target == "regex-replace":
         rx = spec.get("regex") or {}
         pattern = rx.get("pattern")
@@ -170,7 +166,6 @@ def _insert_block(
     match: re.Match,
     marker: str,
     block: str,
-    trailing: bool,
 ) -> str:
     nl = "\r\n" if "\r\n" in content else "\n"
     indent = match.group("indent")

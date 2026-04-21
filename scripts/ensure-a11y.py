@@ -59,16 +59,28 @@ def iter_html_files(root: str):
 
 def parse_attrs(attr_str: str) -> dict[str, str]:
     attrs: dict[str, str] = {}
+    # First pass: key="value" or key='value'.
+    consumed_spans: list[tuple[int, int]] = []
     for m in ATTR_RE.finditer(attr_str):
         key = (m.group(1) or m.group(3) or "").lower()
         val = m.group(2) if m.group(2) is not None else m.group(4) or ""
         if key:
             attrs[key] = val
-    # Boolean-ish attributes without values.
-    for token in re.findall(r"\b([\w-]+)\b", attr_str):
-        token = token.lower()
-        if token not in attrs:
-            attrs[token] = ""
+            consumed_spans.append((m.start(), m.end()))
+    # Second pass: boolean attributes (no value) in the *gaps* between
+    # consumed key="value" spans. Scanning the whole string would pull
+    # value fragments (e.g. 'png' from src="x.png") into the attrs dict.
+    cursor = 0
+    remaining_segments: list[str] = []
+    for start, end in consumed_spans:
+        remaining_segments.append(attr_str[cursor:start])
+        cursor = end
+    remaining_segments.append(attr_str[cursor:])
+    for segment in remaining_segments:
+        for token in re.findall(r"\b([A-Za-z][\w-]*)\b", segment):
+            token = token.lower()
+            if token not in attrs:
+                attrs[token] = ""
     return attrs
 
 
@@ -161,9 +173,8 @@ def main() -> int:
     all_issues: list[dict[str, Any]] = []
     file_count = 0
     for path in sorted(iter_html_files(REPO_ROOT)):
-        if os.path.abspath(path) == os.path.abspath(ROOT_INDEX):
-            # Still scan the landing page for a11y issues.
-            pass
+        # Root index.html is scanned too: the landing page benefits from
+        # the same accessibility guarantees as every infographic.
         file_count += 1
         all_issues.extend(scan_file(path))
 
@@ -183,7 +194,9 @@ def main() -> int:
     out_path = args.report
     if not os.path.isabs(out_path):
         out_path = os.path.join(REPO_ROOT, out_path)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    out_dir = os.path.dirname(out_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2, ensure_ascii=False)
         fh.write("\n")

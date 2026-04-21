@@ -18,7 +18,9 @@ Modes:
         # Suitable for warn-only CI.
 
     python3 scripts/check-deprecated-terms.py --apply
-        # rewrites matches per terminology.json. Emits a per-file summary.
+        # rewrites matches per terminology.json. By default only rules
+        # at severity=high are applied; pass --min-severity medium or
+        # --min-severity low to include lower-severity rules.
 
 Redirect stubs (<meta http-equiv="refresh">) and the root index.html are
 skipped, matching the pattern used by ensure-tracking.py /
@@ -42,6 +44,7 @@ META_REFRESH_RE = re.compile(
     r'<meta\s+http-equiv=["\']refresh["\']', re.IGNORECASE
 )
 SKIP_DIRS = {".git", "node_modules", ".github", "reports"}
+SEVERITY_ORDER = {"low": 0, "medium": 1, "high": 2}
 
 
 def load_rules() -> list[dict[str, Any]]:
@@ -50,6 +53,11 @@ def load_rules() -> list[dict[str, Any]]:
     rules = data.get("rules", [])
     for rule in rules:
         rule["compiled"] = re.compile(rule["pattern"])
+        if rule.get("severity") not in SEVERITY_ORDER:
+            raise ValueError(
+                f"rule '{rule.get('id')}' has invalid severity "
+                f"'{rule.get('severity')}'; expected one of {sorted(SEVERITY_ORDER)}"
+            )
     return rules
 
 
@@ -103,7 +111,9 @@ def scan_file(path: str, rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return hits
 
 
-def apply_fixes(path: str, rules: list[dict[str, Any]]) -> int:
+def apply_fixes(
+    path: str, rules: list[dict[str, Any]], min_severity: int
+) -> int:
     with open(path, encoding="utf-8", errors="replace") as fh:
         content = fh.read()
     if META_REFRESH_RE.search(content):
@@ -111,6 +121,8 @@ def apply_fixes(path: str, rules: list[dict[str, Any]]) -> int:
 
     total = 0
     for rule in rules:
+        if SEVERITY_ORDER[rule.get("severity", "medium")] < min_severity:
+            continue
         pattern: re.Pattern[str] = rule["compiled"]
         replacement: str = rule["replacement"]
 
@@ -156,6 +168,17 @@ def main() -> int:
         help="Rewrite deprecated terms per terminology.json.",
     )
     parser.add_argument(
+        "--min-severity",
+        choices=sorted(SEVERITY_ORDER, key=lambda s: SEVERITY_ORDER[s]),
+        default="high",
+        help=(
+            "Severity threshold for --apply. Defaults to 'high' so "
+            "lower-severity rules require an explicit opt-in. Has no "
+            "effect in --check or report mode (those always report all "
+            "rules)."
+        ),
+    )
+    parser.add_argument(
         "--report",
         default=os.path.join("reports", "deprecated-terms.json"),
         help="Where to write the JSON report (relative to repo root).",
@@ -164,6 +187,7 @@ def main() -> int:
 
     rules = load_rules()
     files = iter_html_files()
+    min_sev = SEVERITY_ORDER[args.min_severity]
 
     report: dict[str, Any] = {"files": {}, "summary": {}}
     total_hits = 0
@@ -173,10 +197,11 @@ def main() -> int:
         hits = scan_file(path, rules)
         rel = os.path.relpath(path, REPO_ROOT).replace("\\", "/")
         if args.apply:
-            applied = apply_fixes(path, rules)
+            applied = apply_fixes(path, rules, min_sev)
             total_applied += applied
             # Re-scan post-apply so the report reflects remaining issues
-            # (should be zero if our is_already_fixed guard is correct).
+            # (should be zero for rules at/above the severity threshold
+            # if our is_already_fixed guard is correct).
             hits = scan_file(path, rules)
         if hits:
             report["files"][rel] = hits
@@ -188,12 +213,15 @@ def main() -> int:
         "total_hits": total_hits,
         "total_applied": total_applied,
         "mode": "apply" if args.apply else ("check" if args.check else "report"),
+        "min_severity_for_apply": args.min_severity,
     }
 
     out_path = args.report
     if not os.path.isabs(out_path):
         out_path = os.path.join(REPO_ROOT, out_path)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    out_dir = os.path.dirname(out_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
