@@ -52,7 +52,12 @@
   },
   "avd": {
     "displayName": "AVD",
-    "items": []
+    "items": [
+      {
+        "file": "healthcare-vdi-strategyguide.html",
+        "title": "Healthcare VDI Strategy — Windows 365 + Azure Virtual Desktop"
+      }
+    ]
   },
   "app-platform-services": {
     "displayName": "App Platform Services",
