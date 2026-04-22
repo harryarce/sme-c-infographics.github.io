@@ -10,6 +10,8 @@ on:
       - "**/*.html"
       - "scripts/ensure-tracking.py"
       - "scripts/ensure-back-button.py"
+      - "scripts/ensure-meta.py"
+      - "scripts/ensure-favicon.py"
       - "scripts/generate-manifest.py"
       - ".github/workflows/fix-site-chrome-pr.yml"
 
@@ -42,6 +44,12 @@ jobs:
 
       - name: Ensure back button on HTML pages
         run: python3 scripts/ensure-back-button.py
+
+      - name: Ensure SEO / social meta block on HTML pages
+        run: python3 scripts/ensure-meta.py
+
+      - name: Ensure favicon link on HTML pages
+        run: python3 scripts/ensure-favicon.py
 
       - name: Regenerate infographic manifest
         run: python3 scripts/generate-manifest.py
