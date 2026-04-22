@@ -144,11 +144,16 @@ Findings from each phase are appended below as the spike progresses.
   start work — same design reason `GITHUB_TOKEN` events don't cascade
   into other workflows. To actually kick off Copilot from this
   workflow, create a repo or org secret named `COPILOT_ASSIGN_TOKEN`
-  containing a fine-grained PAT (or GitHub App installation token)
-  for a user who has Copilot access on this repo. Required scopes:
-  `issues: write`, `contents: read`, `metadata: read`. The workflow
-  prefers this secret and falls back to `GITHUB_TOKEN` with a log
-  warning + step-summary note if it is absent.
+  containing a **fine-grained PAT** owned by a user who has Copilot
+  access on this repo. Required scopes: `Issues: Read and write`,
+  `Contents: Read`, `Metadata: Read`. Fine-grained is strongly
+  preferred over a classic PAT (which would grant broad `repo` write).
+  When the secret is absent the workflow still runs: it creates the
+  issues and **intentionally leaves them unassigned**, emits a
+  `core.warning`, and flags it in the step summary — rather than
+  assigning under `GITHUB_TOKEN` and silently reproducing the exact
+  bug this setup was meant to fix. A human can re-assign Copilot
+  manually to unblock, or the PAT secret can be added.
 
 ### Outstanding decisions / follow-ups
 
