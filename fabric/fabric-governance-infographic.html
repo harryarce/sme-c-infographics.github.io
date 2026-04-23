@@ -421,6 +421,8 @@
 <meta name="twitter:description" content="Microsoft Fabric Governance Framework — an interactive infographic from the SME&amp;C Infographic Hub.">
 <!-- smec-favicon v1 -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- smec-accuracy v1 -->
+<meta name="smec:last-accuracy-check" content="2026-04-23">
 </head>
 <body>
 <a href="/" class="smec-back-btn" data-smec-back-button="v1" aria-label="Back to SME&amp;C Infographics"><svg class="smec-back-btn__icon" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg><span class="smec-back-btn__label">Back to SME&amp;C Infographics</span></a>
@@ -469,7 +471,7 @@
         <h3 class="column-title pitfall-title">⚠️ Common Pitfalls</h3>
         <div class="pitfall-item"><h4>Leaving defaults on</h4><p>Fabric ships with permissive defaults. If you don't review them, every user can create workspaces, share externally, and use AI features without guardrails.</p></div>
         <div class="pitfall-item"><h4>No admin role governance</h4><p>Too many Fabric Admins means too many people can change tenant-wide settings. Limit admin roles and use PIM for just-in-time access.</p></div>
-        <div class="pitfall-item"><h4>Audit log blind spot</h4><p>The default 90-day retention means you lose compliance evidence. Export to Log Analytics or a storage account for long-term retention.</p></div>
+        <div class="pitfall-item"><h4>Audit log blind spot</h4><p>The Power BI activity log retains data for only 30 days; the Unified Audit Log default is 180 days. Both may fall short of compliance requirements. Export to Log Analytics or a storage account for long-term retention.</p></div>
         <div class="pitfall-item"><h4>Feature toggle whack-a-mole</h4><p>Microsoft releases new features monthly. Without a review process, new toggles get enabled without evaluation — creating shadow governance gaps.</p></div>
       </div>
     </div>
@@ -638,7 +640,7 @@
     <div class="cards">
       <div class="rec-card"><div class="card-accent" style="background:#F59E0B"></div><div class="step-num" style="background:#F59E0B">1</div><h4>Capacity Topology</h4><p class="desc"><strong>Pattern 1:</strong> Single shared (NOT for prod).<br><strong>Pattern 2 (Recommended):</strong> Per domain — enables cost attribution.<br><strong>Pattern 3:</strong> Per workload type (interactive vs background).<br><strong>Pattern 4:</strong> Per environment + domain (enterprise).</p></div>
       <div class="rec-card"><div class="card-accent" style="background:#F59E0B"></div><div class="step-num" style="background:#F59E0B">2</div><h4>Monitor Before You Scale</h4><p class="desc">Deploy the <strong>Capacity Metrics app</strong> on day one.<br>Review <strong>weekly</strong>. Scale based on data, not guesses.<br><strong>F2 handles more than you'd expect</strong> for BI-only workloads.</p></div>
-      <div class="rec-card"><div class="card-accent" style="background:#F59E0B"></div><div class="step-num" style="background:#F59E0B">3</div><h4>Smoothing vs Throttling</h4><p class="desc">Fabric's <strong>24h smoothing window</strong> absorbs burst usage.<br>But if your average exceeds capacity:<br><strong>1.</strong> Background jobs get delayed (10min+)<br><strong>2.</strong> Interactive queries get throttled<br><strong>3.</strong> Everything gets rejected</p></div>
+      <div class="rec-card"><div class="card-accent" style="background:#F59E0B"></div><div class="step-num" style="background:#F59E0B">3</div><h4>Smoothing vs Throttling</h4><p class="desc">Fabric's <strong>24h smoothing window</strong> absorbs burst usage.<br>But if your average exceeds capacity:<br><strong>1.</strong> Interactive operations delayed 20 sec (usage &gt; 10 min of capacity)<br><strong>2.</strong> Interactive operations rejected (usage &gt; 60 min of capacity)<br><strong>3.</strong> All requests rejected incl. background (usage &gt; 24 hr)</p></div>
       <div class="rec-card"><div class="card-accent" style="background:#F59E0B"></div><div class="step-num" style="background:#F59E0B">4</div><h4>Showback First</h4><p class="desc">Start with <strong>showback</strong>: give each domain visibility into their CU consumption.<br>After <strong>6–12 months</strong> of stable patterns, transition to <strong>chargeback</strong> for true cost accountability.</p></div>
     </div>
 
