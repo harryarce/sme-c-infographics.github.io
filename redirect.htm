@@ -74,12 +74,20 @@
 
       function isSafeHttpsUrl(value) {
         if (!value) return false;
-        try {
-          var parsed = new URL(value);
-          return parsed.protocol === "https:";
-        } catch (_) {
-          return false;
-        }
+        var parsed;
+        try { parsed = new URL(value); } catch (_) { return false; }
+        if (parsed.protocol !== "https:") return false;
+        // Destination allow-list. Mirrors link-builder.html — keep
+        // them in sync. Match exact host or any subdomain of it.
+        var allowed = [
+          "msit.events.teams.microsoft.com",
+          "smecevents.cloudevents.ai",
+          "msevents.microsoft.com"
+        ];
+        var host = parsed.hostname.toLowerCase();
+        return allowed.some(function (a) {
+          return host === a || host.endsWith("." + a);
+        });
       }
 
       if (!isSafeHttpsUrl(dest)) {

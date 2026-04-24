@@ -179,10 +179,15 @@
     </p>
 
     <form id="builder" autocomplete="off">
-      <label for="dest">Destination URL <span class="hint">(https only)</span></label>
+      <label for="dest">Destination URL <span class="hint">(must be under an allowed event host)</span></label>
       <input type="url" id="dest" name="dest" required
              pattern="https://.*"
-             placeholder="https://example.com/page" />
+             placeholder="https://msevents.microsoft.com/event/..." />
+      <p class="hint" style="margin-top:6px; margin-left:0;">
+        Allowed hosts: <code>msit.events.teams.microsoft.com</code>,
+        <code>smecevents.cloudevents.ai</code>,
+        <code>msevents.microsoft.com</code> (and subdomains of each).
+      </p>
 
       <div class="row">
         <div>
@@ -248,6 +253,26 @@
       // local clone or preview environment.
       var REDIRECT_BASE = "https://sme-c-infographics.github.io/redirect.htm";
 
+      // Destination allow-list. The redirect endpoint enforces the
+      // same list — keep them in sync. Each entry matches the exact
+      // host or any subdomain of it.
+      var ALLOWED_HOSTS = [
+        "msit.events.teams.microsoft.com",
+        "smecevents.cloudevents.ai",
+        "msevents.microsoft.com"
+      ];
+
+      function isAllowedHttpsUrl(value) {
+        if (!value) return false;
+        var parsed;
+        try { parsed = new URL(value); } catch (_) { return false; }
+        if (parsed.protocol !== "https:") return false;
+        var host = parsed.hostname.toLowerCase();
+        return ALLOWED_HOSTS.some(function (allowed) {
+          return host === allowed || host.endsWith("." + allowed);
+        });
+      }
+
       var form = document.getElementById("builder");
       var out = document.getElementById("out");
       var msg = document.getElementById("msg");
@@ -270,10 +295,14 @@
           setMsg("Please fill in URL, source, medium, and campaign.", false);
           return null;
         }
-        // Reject anything that isn't an https URL up front so the
-        // redirect page can rely on the same allow-list.
-        if (dest.toLowerCase().indexOf("https://") !== 0) {
-          setMsg("URL must start with https://", false);
+        // Reject anything that isn't an https URL on an allowed host
+        // up front so the redirect page can rely on the same check.
+        if (!isAllowedHttpsUrl(dest)) {
+          setMsg(
+            "URL must be https:// and on one of: " +
+            ALLOWED_HOSTS.join(", "),
+            false
+          );
           return null;
         }
 
