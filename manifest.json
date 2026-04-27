@@ -78,7 +78,12 @@
   },
   "defender-for-cloud": {
     "displayName": "Defender for Cloud",
-    "items": []
+    "items": [
+      {
+        "file": "defender-for-cloud-unified-security.html",
+        "title": "Microsoft Defender for Cloud · Interactive Learning"
+      }
+    ]
   },
   "infrastructure": {
     "displayName": "Infrastructure",
