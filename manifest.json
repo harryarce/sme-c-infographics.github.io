@@ -41,12 +41,20 @@
     "displayName": "AI & Foundry",
     "items": [
       {
-        "file": "frontier-firm-playbook.html",
-        "title": "Become a Frontier Firm — Microsoft's Playbook for the Agentic Enterprise"
+        "file": "ai-agent-anatomy.html",
+        "title": "The Anatomy of an AI Agent — A Field Guide"
       },
       {
-        "file": "ai-agent-anatomy.html",
-        "title": "The Anatomy of an AI Agent"
+        "file": "ai-gateway-apim.html",
+        "title": "AI Gateway in Azure API Management — One Front Door for Every Model"
+      },
+      {
+        "file": "ai-landing-zones.html",
+        "title": "Azure AI Landing Zones — The Runway Before Takeoff"
+      },
+      {
+        "file": "frontier-firm-playbook.html",
+        "title": "Become a Frontier Firm — Microsoft's Playbook for the Agentic Enterprise"
       },
       {
         "file": "microsoft-ai-decision-guide.html",
@@ -55,14 +63,6 @@
       {
         "file": "microsoft-iq-platforms-guide.html",
         "title": "Microsoft IQ Platforms — Foundry IQ, Fabric IQ, Work IQ: The Knowledge Layer for Smarter Agents"
-      },
-      {
-        "file": "ai-landing-zones.html",
-        "title": "Azure AI Landing Zones — The Runway Before Takeoff"
-      },
-      {
-        "file": "ai-gateway-apim.html",
-        "title": "AI Gateway in Azure API Management — One Front Door for Every Model"
       }
     ]
   },
