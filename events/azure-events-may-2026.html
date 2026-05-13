@@ -202,6 +202,23 @@
     .events { grid-template-columns: 1fr; }
     .sessions li { flex-direction: column; align-items: flex-start; gap: 4px; }
   }
+  .event-card--past {
+    opacity: 0.45;
+    filter: grayscale(0.55);
+  }
+  .event-card--past:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .event-card--past .btn {
+    background: #a19f9d;
+    pointer-events: none;
+    cursor: default;
+  }
+  .session-past {
+    opacity: 0.45;
+    text-decoration: line-through;
+  }
 </style>
 <script defer src="https://a.ndme.sh/script.js" data-website-id="9478c1a0-93c6-4c21-855a-69e50e15cbc4"></script>
 <style>/* smec-back-btn v1 */
@@ -457,6 +474,59 @@
       const startTime = start.toLocaleTimeString(undefined, tzOpts);
       el.textContent = dateStr + ' · ' + startTime;
     }
+  });
+})();
+</script>
+
+<script>
+/* Grey out and reorder past events */
+(function () {
+  var now = new Date();
+
+  function isPast(startIso, endIso) {
+    var cutoff = endIso ? new Date(endIso) : new Date(startIso);
+    return !isNaN(cutoff.getTime()) && cutoff < now;
+  }
+
+  document.querySelectorAll('.events').forEach(function (grid) {
+    var upcomingCards = [];
+    var pastCards = [];
+
+    Array.from(grid.querySelectorAll('.event-card')).forEach(function (card) {
+      var sessionsEl = card.querySelector('.sessions');
+      var cardIsPast;
+
+      if (sessionsEl) {
+        /* Multi-session card: dim individual past sessions;
+           move the whole card only when every session has ended. */
+        var sessionItems = Array.from(sessionsEl.querySelectorAll('li'));
+        var allPast = sessionItems.length > 0;
+        sessionItems.forEach(function (li) {
+          var timeEl = li.querySelector('.event-time[data-start]');
+          if (timeEl && isPast(timeEl.dataset.start, timeEl.dataset.end)) {
+            li.classList.add('session-past');
+          } else {
+            allPast = false;
+          }
+        });
+        cardIsPast = allPast;
+      } else {
+        var timeEl = card.querySelector('.event-time[data-start]');
+        cardIsPast = timeEl ? isPast(timeEl.dataset.start, timeEl.dataset.end) : false;
+      }
+
+      if (cardIsPast) {
+        card.classList.add('event-card--past');
+        pastCards.push(card);
+      } else {
+        upcomingCards.push(card);
+      }
+    });
+
+    /* Re-append: upcoming first, then past cards at the bottom */
+    upcomingCards.concat(pastCards).forEach(function (card) {
+      grid.appendChild(card);
+    });
   });
 })();
 </script>
