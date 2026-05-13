@@ -202,6 +202,23 @@
     .events { grid-template-columns: 1fr; }
     .sessions li { flex-direction: column; align-items: flex-start; gap: 4px; }
   }
+  .event-card--past {
+    opacity: 0.45;
+    filter: grayscale(0.55);
+  }
+  .event-card--past:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .event-card--past .btn {
+    background: #a19f9d;
+    pointer-events: none;
+    cursor: default;
+  }
+  .session-past {
+    opacity: 0.45;
+    text-decoration: line-through;
+  }
 </style>
 <script defer src="https://a.ndme.sh/script.js" data-website-id="9478c1a0-93c6-4c21-855a-69e50e15cbc4"></script>
 <style>/* smec-back-btn v1 */
@@ -315,14 +332,6 @@
 
       <div class="event-card">
         <span class="event-tag tag-webinar">Webinar</span>
-        <h3>From On-Prem to Azure: Modernizing Your VMs and Databases Without the Guesswork</h3>
-        <div class="event-meta"><span class="icon">📅</span> <span class="event-time" data-start="2026-05-14T19:00:00Z" data-end="2026-05-14T20:15:00Z"></span></div>
-        <p>Migrate VMs and databases to Azure with confidence. Covers Azure Migrate, database options (Azure SQL, Managed Instance, SQL on Azure VMs), Hybrid Benefit, and best practices for a clean cutover.</p>
-        <a class="btn" href="https://sme-c-infographics.github.io/redirect.htm?url=https%3A%2F%2Fmsit.events.teams.microsoft.com%2Fevent%2Fmsit.661de990-f446-49b9-8730-1a826ea6580a%4072f988bf-86f1-41af-91ab-2d7cd011db47&utm_source=azure-events-may-2026&utm_medium=social&utm_campaign=PolePosition&utm_term=Migrate&utm_content=From-On-Prem-to-Azure-2026-05-14" target="_blank" rel="noopener">Register</a>
-      </div>
-
-      <div class="event-card">
-        <span class="event-tag tag-webinar">Webinar</span>
         <h3>Azure SQL in Focus: Choosing, Migrating, and Innovating on Microsoft's Flagship Cloud Database</h3>
         <div class="event-meta"><span class="icon">📅</span> <span class="event-time" data-start="2026-05-19T17:00:00Z" data-end="2026-05-19T18:15:00Z"></span></div>
         <p>The full Azure SQL family — Database, Managed Instance, and SQL on VMs — plus a first look at SQL Server 2025's AI capabilities including vector search, OpenAI integration, and Copilot for SQL.</p>
@@ -351,6 +360,14 @@
         <div class="event-meta"><span class="icon">📅</span> <span class="event-time" data-start="2026-05-28T18:00:00Z" data-end="2026-05-28T19:15:00Z"></span></div>
         <p>A practical guide to taking an Azure AI Foundry POC into production using CAF and WAF-aligned patterns, with APIM as your AI gateway.</p>
         <a class="btn" href="https://sme-c-infographics.github.io/redirect.htm?url=https%3A%2F%2Fmsit.events.teams.microsoft.com%2Fevent%2Fmsit.0ed03664-515d-42b5-a41c-3dd5c8ac1dda%4072f988bf-86f1-41af-91ab-2d7cd011db47&utm_source=azure-events-may-2026&utm_medium=social&utm_campaign=PolePosition&utm_term=Foundry&utm_content=AILanding-Zone-2026-05-28" target="_blank" rel="noopener">Register</a>
+      </div>
+
+      <div class="event-card">
+        <span class="event-tag tag-webinar">Webinar</span>
+        <h3>From On-Prem to Azure: Modernizing Your VMs and Databases Without the Guesswork</h3>
+        <div class="event-meta"><span class="icon">📅</span> <span class="event-time" data-start="2026-05-29T16:00:00Z" data-end="2026-05-29T17:15:00Z"></span></div>
+        <p>Migrate VMs and databases to Azure with confidence. Covers Azure Migrate, database options (Azure SQL, Managed Instance, SQL on Azure VMs), Hybrid Benefit, and best practices for a clean cutover.</p>
+        <a class="btn" href="https://sme-c-infographics.github.io/redirect.htm?url=https%3A%2F%2Fmsit.events.teams.microsoft.com%2Fevent%2Fmsit.661de990-f446-49b9-8730-1a826ea6580a%4072f988bf-86f1-41af-91ab-2d7cd011db47&utm_source=azure-events-may-2026&utm_medium=social&utm_campaign=PolePosition&utm_term=Migrate&utm_content=From-On-Prem-to-Azure-2026-05-14" target="_blank" rel="noopener">Register</a>
       </div>
 
     </div>
@@ -457,6 +474,59 @@
       const startTime = start.toLocaleTimeString(undefined, tzOpts);
       el.textContent = dateStr + ' · ' + startTime;
     }
+  });
+})();
+</script>
+
+<script>
+/* Grey out and reorder past events */
+(function () {
+  var now = new Date();
+
+  function isPast(startIso, endIso) {
+    var cutoff = endIso ? new Date(endIso) : new Date(startIso);
+    return !isNaN(cutoff.getTime()) && cutoff < now;
+  }
+
+  document.querySelectorAll('.events').forEach(function (grid) {
+    var upcomingCards = [];
+    var pastCards = [];
+
+    Array.from(grid.querySelectorAll('.event-card')).forEach(function (card) {
+      var sessionsEl = card.querySelector('.sessions');
+      var cardIsPast;
+
+      if (sessionsEl) {
+        /* Multi-session card: dim individual past sessions;
+           move the whole card only when every session has ended. */
+        var sessionItems = Array.from(sessionsEl.querySelectorAll('li'));
+        var allPast = sessionItems.length > 0;
+        sessionItems.forEach(function (li) {
+          var timeEl = li.querySelector('.event-time[data-start]');
+          if (timeEl && isPast(timeEl.dataset.start, timeEl.dataset.end)) {
+            li.classList.add('session-past');
+          } else {
+            allPast = false;
+          }
+        });
+        cardIsPast = allPast;
+      } else {
+        var timeEl = card.querySelector('.event-time[data-start]');
+        cardIsPast = timeEl ? isPast(timeEl.dataset.start, timeEl.dataset.end) : false;
+      }
+
+      if (cardIsPast) {
+        card.classList.add('event-card--past');
+        pastCards.push(card);
+      } else {
+        upcomingCards.push(card);
+      }
+    });
+
+    /* Re-append: upcoming first, then past cards at the bottom */
+    upcomingCards.concat(pastCards).forEach(function (card) {
+      grid.appendChild(card);
+    });
   });
 })();
 </script>
