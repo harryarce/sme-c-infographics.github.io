@@ -632,7 +632,7 @@
 <!-- smec-favicon v1 -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- smec-accuracy v1 -->
-<meta name="smec:last-accuracy-check" content="2026-05-07">
+<meta name="smec:last-accuracy-check" content="2026-05-14">
 </head>
 <body>
 <a href="/" class="smec-back-btn" data-smec-back-button="v1" aria-label="Back to SME&amp;C Infographics"><svg class="smec-back-btn__icon" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg><span class="smec-back-btn__label">Back to SME&amp;C Infographics</span></a>
@@ -925,8 +925,8 @@
         <ul>
           <li><strong>Content safety</strong> — Azure AI Content Safety policy moderates LLM prompts</li>
           <li><strong>Managed identity</strong> to Foundry / Azure OpenAI — eliminates API keys</li>
-          <li><strong>OAuth 2.0 / Entra ID</strong> via Credential Manager (inbound + outbound)</li>
-          <li><strong>OAuth 2.1 native MCP auth</strong> aligned with MCP spec 2025-06-18 <span class="pv">New</span></li>
+          <li><strong>OAuth 2.0 / Entra ID</strong> via Credential Manager (inbound + outbound) — see <a href="https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities" target="_blank" style="color:var(--accent);">APIM AI gateway capabilities</a></li>
+          <li><strong>OAuth 2.1 native MCP auth</strong> — <strong>GA in March 2026 APIM release, aligned with MCP spec 2025-06-18</strong> (<a href="https://learn.microsoft.com/en-us/azure/api-management/mcp-server-overview" target="_blank" style="color:var(--accent);">MCP server overview</a>) <span class="pv">GA</span></li>
           <li><strong>Private connectivity</strong> via APIM private endpoints &amp; VNets</li>
         </ul>
       </div>
@@ -1302,6 +1302,36 @@
         <h3>Expose REST as MCP</h3>
         <p>Step-by-step: turn an APIM-managed REST API into a remote MCP server in a few clicks — endpoint at <code>/mcp</code>, Streamable HTTP.</p>
         <div class="arrow">Try it →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="background:linear-gradient(135deg,#0a1840,#1a0a3a);color:#fff;padding:4rem 2rem;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#50e6ff;margin-bottom:.75rem;">Related Infographics</div>
+    <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);color:#fff;margin-bottom:.5rem;">Continue exploring the Microsoft stack</h2>
+    <p style="color:rgba(255,255,255,.72);max-width:720px;margin-bottom:2rem;">The gateway is one slice of a larger stack. Start with the overview, then explore what flows through it.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;">
+      <a href="00-microsoft-stack-overview.html" style="display:block;background:rgba(80,230,255,.08);border:1px solid rgba(80,230,255,.3);border-radius:12px;padding:1.25rem;color:#fff;text-decoration:none;">
+        <div style="font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#50e6ff;">★ Entry point</div>
+        <div style="font-weight:700;margin-top:.3rem;">Microsoft Stack Overview</div>
+        <div style="font-size:.84rem;color:rgba(255,255,255,.7);margin-top:.3rem;">5 layers + 2 rails, top to bottom.</div>
+      </a>
+      <a href="ai-agent-anatomy.html" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:1.25rem;color:#fff;text-decoration:none;">
+        <div style="font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#50e6ff;">Agents</div>
+        <div style="font-weight:700;margin-top:.3rem;">Anatomy of an AI Agent</div>
+        <div style="font-size:.84rem;color:rgba(255,255,255,.7);margin-top:.3rem;">The clients calling through the gateway.</div>
+      </a>
+      <a href="microsoft-ai-decision-guide.html" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:1.25rem;color:#fff;text-decoration:none;">
+        <div style="font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#50e6ff;">Decision</div>
+        <div style="font-weight:700;margin-top:.3rem;">AI Platform Decision Guide</div>
+        <div style="font-size:.84rem;color:rgba(255,255,255,.7);margin-top:.3rem;">Which platform should sit behind APIM.</div>
+      </a>
+      <a href="ai-landing-zones.html" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:1.25rem;color:#fff;text-decoration:none;">
+        <div style="font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#50e6ff;">Infrastructure</div>
+        <div style="font-weight:700;margin-top:.3rem;">Azure AI Landing Zones</div>
+        <div style="font-size:.84rem;color:rgba(255,255,255,.7);margin-top:.3rem;">Where the gateway is deployed.</div>
       </a>
     </div>
   </div>
