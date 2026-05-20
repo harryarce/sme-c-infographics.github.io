@@ -96,7 +96,7 @@ Findings from each phase are appended below as the spike progresses.
 | `scripts/check-links.py` | HEAD/GET every external http(s) link → `reports/link-health.json` | n/a |
 | `scripts/check-deprecated-terms.py` | Scan / optionally rewrite terms from `terminology.json` | n/a |
 | `scripts/ensure-tracking.py` (existing) | Inject Umami analytics snippet | `data-website-id=...` |
-| `scripts/ensure-back-button.py` (existing) | Inject floating back button | `data-smec-back-button="v1"` |
+| `scripts/ensure-back-button.py` (existing) | Inject floating back button | `data-smec-back-button="v2"` |
 | `scripts/ensure-meta.py` | Inject description / OG / Twitter tags | `<!-- smec-meta v1 -->` |
 | `scripts/ensure-favicon.py` | Inject favicon `<link>` pointing at `/favicon.svg` | `<!-- smec-favicon v1 -->` |
 | `scripts/ensure-a11y.py` | Read-only a11y report → `reports/a11y.json` | n/a |
