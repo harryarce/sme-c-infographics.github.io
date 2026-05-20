@@ -21,7 +21,7 @@ Every chrome script follows the same contract (see
 1. **Idempotent** — running twice is a no-op the second time.
 2. Carries a **version marker** the script greps for to detect prior injections,
    e.g. `<!-- smec-meta v1 -->`, `<!-- smec-favicon v1 -->`,
-   `data-smec-back-button="v1"`, `data-website-id=<umami-id>`,
+   `data-smec-back-button="v2"`, `data-website-id=<umami-id>`,
    `<!-- smec-tmpl:<id> -->` for bulk templating.
 3. Supports `--check` (exits non-zero if any file is missing the expected
    state, modifies nothing) — this is what CI calls.

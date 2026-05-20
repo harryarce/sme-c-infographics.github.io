@@ -5,9 +5,9 @@ every HTML infographic page. The button links to the library landing
 page ("/") so users who arrive directly on an infographic can return
 to the index.
 
-Collapsed, the button is a small circular icon in the top-left corner;
-on hover, focus, or on coarse-pointer (touch) devices it expands to
-reveal the label "Back to SME&C Infographics".
+Collapsed, the button is a small pill in the bottom-left corner that
+reads "Back". On hover, focus, or on coarse-pointer (touch) devices it
+expands to reveal the full label "Back to SME&C Infographics".
 
 Idempotent: if the button is already present (detected by a unique
 anchor + style marker pair) the file is left unchanged. Redirect stubs
@@ -32,71 +32,74 @@ import sys
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_INDEX = os.path.join(REPO_ROOT, "index.html")
 
-MARKER = 'data-smec-back-button="v1"'
-STYLE_MARKER = "/* smec-back-btn v1 */"
+MARKER = 'data-smec-back-button="v2"'
+STYLE_MARKER = "/* smec-back-btn v2 */"
+
+# Legacy v1 markers — when found, the v1 style block and anchor are
+# stripped so the current v2 versions can replace them cleanly.
+OLD_STYLE_MARKER = "/* smec-back-btn v1 */"
+OLD_ANCHOR_RE = re.compile(
+    r'[ \t]*<a\b[^>]*\bdata-smec-back-button\s*=\s*["\']v1["\'][^>]*>'
+    r'.*?</a>\s*\r?\n?',
+    re.IGNORECASE | re.DOTALL,
+)
+OLD_STYLE_RE = re.compile(
+    r'[ \t]*<style>\s*/\*\s*smec-back-btn v1\s*\*/.*?</style>\s*\r?\n?',
+    re.IGNORECASE | re.DOTALL,
+)
 
 BACK_BUTTON_STYLE = (
     "<style>" + STYLE_MARKER + """
 .smec-back-btn { position: fixed; bottom: 16px; left: 16px; z-index: 9999;
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 0; min-width: 44px; height: 44px; padding: 0; border-radius: 22px;
-  background: rgba(0, 120, 212, 0.92); color: #fff; text-decoration: none;
-  font: 600 13px/1 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: flex-start;
+  gap: 8px; height: 40px; padding: 0 16px 0 12px; border-radius: 20px;
+  background: rgba(0, 120, 212, 0.92) !important; color: #fff !important;
+  text-decoration: none !important;
+  font: 600 14px/1 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: 0.01em;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18); backdrop-filter: blur(6px);
   opacity: 0;
   animation: smec-back-btn-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
-  /* Collapsing: wait for the label to fade out, then shrink the pill. */
   transition:
-    padding 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
-    gap 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
-    background 0.35s ease 0s,
-    box-shadow 0.35s ease 0s;
+    padding 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    box-shadow 0.3s ease;
   overflow: hidden; white-space: nowrap; }
-.smec-back-btn__icon { flex: 0 0 auto;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.2s; }
-.smec-back-btn__label { max-width: 0; opacity: 0;
-  /* Collapsing: label fades out first, then its width collapses with the pill. */
+.smec-back-btn__icon { flex: 0 0 auto; display: inline-block;
+  width: 18px; height: 18px; }
+.smec-back-btn__label { display: inline-block; flex: 0 0 auto;
+  font: inherit; color: inherit; }
+.smec-back-btn__more { display: inline-block; max-width: 0; opacity: 0;
+  overflow: hidden; vertical-align: bottom;
+  font: inherit; color: inherit;
   transition:
     opacity 0.18s ease 0s,
-    max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s; }
+    max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s; }
 
-/* Expanding: pill and label grow together in one motion; text appears near the end. */
 .smec-back-btn:hover, .smec-back-btn:focus-visible {
-  gap: 10px; padding: 0 18px 0 12px;
-  background: rgba(0, 90, 158, 0.96); color: #fff; text-decoration: none;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-  transition:
-    padding 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0s,
-    gap 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0s,
-    background 0.35s ease 0s,
-    box-shadow 0.35s ease 0s; }
+  background: rgba(0, 90, 158, 0.96) !important; color: #fff !important;
+  text-decoration: none !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
 .smec-back-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.smec-back-btn:hover .smec-back-btn__icon,
-.smec-back-btn:focus-visible .smec-back-btn__icon {
-  transform: translateX(-2px);
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0s; }
-.smec-back-btn:hover .smec-back-btn__label,
-.smec-back-btn:focus-visible .smec-back-btn__label {
+.smec-back-btn:hover .smec-back-btn__more,
+.smec-back-btn:focus-visible .smec-back-btn__more {
   max-width: 260px; opacity: 1;
   transition:
-    max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0s,
-    opacity 0.3s ease 0.3s; }
+    max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0s,
+    opacity 0.25s ease 0.2s; }
 
 @keyframes smec-back-btn-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @media (hover: none) {
-  .smec-back-btn { gap: 10px; padding: 0 18px 0 12px; }
-  .smec-back-btn__label { max-width: 260px; opacity: 1; }
+  .smec-back-btn__more { max-width: 260px; opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .smec-back-btn, .smec-back-btn__icon, .smec-back-btn__label,
-  .smec-back-btn:hover, .smec-back-btn:focus-visible,
-  .smec-back-btn:hover .smec-back-btn__icon,
-  .smec-back-btn:focus-visible .smec-back-btn__icon,
-  .smec-back-btn:hover .smec-back-btn__label,
-  .smec-back-btn:focus-visible .smec-back-btn__label {
+  .smec-back-btn, .smec-back-btn__more,
+  .smec-back-btn:hover .smec-back-btn__more,
+  .smec-back-btn:focus-visible .smec-back-btn__more {
     transition: background 0.2s ease, color 0.2s ease;
     animation: none; opacity: 1; }
 }
@@ -110,7 +113,9 @@ BACK_BUTTON_ANCHOR = (
     '<svg class="smec-back-btn__icon" aria-hidden="true" viewBox="0 0 24 24"'
     ' width="18" height="18"><path fill="currentColor"'
     ' d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>'
-    '<span class="smec-back-btn__label">Back to SME&amp;C Infographics</span>'
+    '<span class="smec-back-btn__label">Back'
+    '<span class="smec-back-btn__more">&nbsp;to SME&amp;C Infographics</span>'
+    '</span>'
     '</a>'
 )
 
@@ -120,7 +125,7 @@ META_REFRESH_RE = re.compile(
     r'<meta\s+http-equiv=["\']refresh["\']', re.IGNORECASE
 )
 ANCHOR_RE = re.compile(
-    r'<a\b[^>]*\bdata-smec-back-button\s*=\s*["\']v1["\']', re.IGNORECASE
+    r'<a\b[^>]*\bdata-smec-back-button\s*=\s*["\']v2["\']', re.IGNORECASE
 )
 
 SKIP_DIRS = {".git", "node_modules", ".github"}
@@ -156,6 +161,11 @@ def ensure_button(filepath: str, check_only: bool = False) -> str:
     has_style = STYLE_MARKER in content
     if has_anchor and has_style:
         return "present"
+
+    # Strip any v1 leftovers before re-injecting the v2 button.
+    if OLD_STYLE_MARKER in content:
+        content = OLD_STYLE_RE.sub("", content)
+    content = OLD_ANCHOR_RE.sub("", content)
 
     head_match = HEAD_CLOSE_RE.search(content)
     if not head_match:
