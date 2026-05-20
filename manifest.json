@@ -41,6 +41,10 @@
     "displayName": "AI & Foundry",
     "items": [
       {
+        "file": "00-microsoft-stack-overview.html",
+        "title": "The Microsoft App, AI & Data Stack — A Top-to-Bottom Map"
+      },
+      {
         "file": "ai-agent-anatomy.html",
         "title": "The Anatomy of an AI Agent — A Field Guide"
       },
