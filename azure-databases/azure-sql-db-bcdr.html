@@ -1183,7 +1183,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
 <!-- smec-favicon v1 -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- smec-accuracy v1 -->
-<meta name="smec:last-accuracy-check" content="2026-04-23">
+<meta name="smec:last-accuracy-check" content="2026-05-28">
 <style>/* smec-back-btn v2 */
 .smec-back-btn { position: fixed; bottom: 16px; left: 16px; z-index: 9999;
   box-sizing: border-box;
@@ -1384,7 +1384,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
       <div class="table-row">
         <div class="label">Disaster Recovery<small>Failover groups / Active geo-replication</small></div>
         <div><span class="pill pill-fast">&lt; 60 seconds</span></div>
-        <div><span class="pill pill-med">Near-zero (async)</span></div>
+        <div><span class="pill pill-med">≥ 0 (async)</span></div>
       </div>
       <div class="table-row">
         <div class="label">Disaster Recovery<small>Geo-restore from geo-redundant backups</small></div>
@@ -1418,7 +1418,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
       <div class="feature-showcase">
         <div class="feature-text">
           <h3>High Availability with Zone Redundancy</h3>
-          <p>Availability Zones are physically separate datacenters inside a single Azure region, each with independent power, cooling, and networking. Zone redundancy uses <strong>synchronous</strong> replication to keep replicas in at least two other zones continuously synchronized. When a zone fails, a replica that already has every committed transaction takes over automatically.</p>
+          <p>Availability Zones are physically separate datacenters inside a single Azure region, each with independent power, cooling, and networking. Zone redundancy uses <strong>synchronous</strong> replication across availability zones within the region. When a zone fails, a continuously synchronized replica takes over automatically.</p>
           <div class="feature-metrics">
             <div class="metric-chip"><div class="m-label">RTO</div><div class="m-value">&lt; 30s</div></div>
             <div class="metric-chip"><div class="m-label">RPO</div><div class="m-value">0</div></div>
@@ -1503,7 +1503,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
           </div>
           <ul class="feature-list">
             <li>Restore to the exact point before a corrupting event</li>
-            <li>Restore a deleted database, even after deletion</li>
+            <li>Restore a deleted database if the logical server still exists</li>
             <li>LTR supports immutable backups for compliance</li>
             <li>Restores create a new database; the original stays intact</li>
           </ul>
@@ -1739,7 +1739,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
       <div class="table-row">
         <div class="label">RPO (data loss)</div>
         <div><span class="pill pill-slow">Minutes to hours</span></div>
-        <div><span class="pill pill-med">Near zero (seconds)</span></div>
+        <div><span class="pill pill-med">≥ 0 (async)</span></div>
       </div>
       <div class="table-row">
         <div class="label">Readable secondary</div>
@@ -1793,7 +1793,7 @@ footer p { font-size: 14px; margin-bottom: 20px; max-width: 600px; margin-left: 
       <div class="enhance-card">
         <div class="enhance-icon">⚡</div>
         <h4>All the speed, none of the complexity</h4>
-        <p>Underneath, it is still Geo-Replication doing the heavy lifting. You get the same sub-60-second RTO and near-zero RPO, but with the app-facing stability and operational structure that a production DR plan actually demands.</p>
+        <p>Underneath, it is still Geo-Replication doing the heavy lifting. You get the same sub-60-second RTO with asynchronous replication, but with the app-facing stability and operational structure that a production DR plan actually demands.</p>
       </div>
     </div>
   </div>
@@ -2001,7 +2001,7 @@ function buildRecommendations() {
   if (a.downtime === 'seconds' || a.downtime === 'minute' || a.dataloss === 'zero') {
     recs.zoneRedundancy = {
       ...featureCatalog.zoneRedundancy,
-      why: 'Zone redundancy uses synchronous replication across three availability zones. When a zone fails, the database switches to a continuously synchronized replica. Note: this zero RPO guarantee applies only to in-region HA failover, not to backup-based recovery like PITR or geo-restore.'
+      why: 'Zone redundancy uses synchronous replication across availability zones within the region. When a zone fails, the database switches to a continuously synchronized replica. Note: this zero RPO guarantee applies only to in-region HA failover, not to backup-based recovery like PITR or geo-restore.'
     };
   }
 
