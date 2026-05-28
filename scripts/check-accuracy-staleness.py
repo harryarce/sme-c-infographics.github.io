@@ -45,10 +45,16 @@ OUT_DIR = os.path.join(REPORTS_DIR, "accuracy-review-issues")
 ISSUE_MARKER = "<!-- copilot-accuracy-review v1 -->"
 
 META_NAME = "smec:last-accuracy-check"
+SUBMITTER_NAME = "smec:submitter"
 META_BLOCK_MARKER = "<!-- smec-accuracy v1 -->"
-
+    
 ACCURACY_META_RE = re.compile(
     r'<meta\s+[^>]*name=["\']' + re.escape(META_NAME)
+    + r'["\'][^>]*content=["\']([^"\']*)["\']',
+    re.IGNORECASE,
+)
+SUBMITTER_META_RE = re.compile(
+    r'<meta\s+[^>]*name=["\']' + re.escape(SUBMITTER_NAME)
     + r'["\'][^>]*content=["\']([^"\']*)["\']',
     re.IGNORECASE,
 )
@@ -77,6 +83,13 @@ def _extract_title(content: str, fallback: str) -> str:
         return fallback
     raw = re.sub(r"\s+", " ", m.group(1)).strip()
     return raw or fallback
+
+
+def _extract_submitter(content: str) -> str | None:
+    m = SUBMITTER_META_RE.search(content)
+    if not m:
+        return None
+    return m.group(1).strip() or None
 
 
 def _sanitize_title(title: str) -> str:
@@ -124,7 +137,8 @@ def _classify(filepath: str, today: dt.date,
 
 
 def _render(rel: str, title: str, last_check: dt.date | None,
-            age_days: int | None, max_age_days: int) -> str:
+            age_days: int | None, max_age_days: int,
+            submitter: str | None) -> str:
     safe_title = _sanitize_title(title)
     if last_check is None:
         freshness_line = (
@@ -154,6 +168,11 @@ def _render(rel: str, title: str, last_check: dt.date | None,
     parts.append(f"**Page title:** {safe_title}")
     parts.append(f"**File:** `{rel}`")
     parts.append(freshness_line)
+    if submitter:
+        parts.append(f"**Original submitter:** `@{submitter}`")
+        parts.append(f"**Reviewer to add on the draft PR:** `@{submitter}`")
+    else:
+        parts.append("**Original submitter:** _not recorded on page metadata._")
     parts.append("")
     parts.append("## What to do")
     parts.append("")
@@ -327,10 +346,10 @@ def main() -> int:
 
     only_prefix = args.only.rstrip("/") + "/" if args.only else None
 
-    eligible: list[tuple[str, str, dt.date | None, int | None]] = []
+    eligible: list[tuple[str, str, dt.date | None, int | None, str | None]] = []
     fresh_count = 0
     skipped_count = 0
-
+    
     for filepath in sorted(iter_html_files(REPO_ROOT)):
         rel = os.path.relpath(filepath, REPO_ROOT).replace(os.sep, "/")
         if only_prefix and not (rel + "/").startswith(only_prefix) and rel != args.only:
@@ -348,7 +367,8 @@ def main() -> int:
         title = _extract_title(
             content, os.path.splitext(os.path.basename(filepath))[0]
         )
-        eligible.append((rel, title, last, age))
+        submitter = _extract_submitter(content)
+        eligible.append((rel, title, last, age, submitter))
 
     os.makedirs(OUT_DIR, exist_ok=True)
     # Clean previous run so the index always matches what's on disk.
@@ -361,11 +381,11 @@ def main() -> int:
 
     index: list[dict[str, Any]] = []
     dropped_over_cap: list[str] = []
-    for rel, title, last, age in eligible:
+    for rel, title, last, age, submitter in eligible:
         if len(index) >= args.max_issues:
             dropped_over_cap.append(rel)
             continue
-        body = _render(rel, title, last, age, args.max_age_days)
+        body = _render(rel, title, last, age, args.max_age_days, submitter)
         slug = rel.replace("/", "__").replace(".html", "")
         out_path = os.path.join(OUT_DIR, f"{slug}.md")
         with open(out_path, "w", encoding="utf-8") as fh:

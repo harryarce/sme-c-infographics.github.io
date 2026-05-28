@@ -13,6 +13,7 @@ on:
       - "scripts/ensure-meta.py"
       - "scripts/ensure-favicon.py"
       - "scripts/generate-manifest.py"
+      - "scripts/tag-submitter.py"
       - ".github/workflows/fix-site-chrome-pr.yml"
 
 permissions:
@@ -38,6 +39,28 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      - name: Collect changed HTML files
+        id: changed
+        run: |
+          set -euo pipefail
+          git fetch origin ${{ github.base_ref }} --depth=1
+          git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}"...HEAD \
+            | grep -E '\.html$' \
+            | sort -u \
+            > changed-html.txt || true
+          echo "Changed HTML files:"
+          cat changed-html.txt || true
+          if [ ! -s changed-html.txt ]; then
+            echo "no_html=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tag original submitter on changed HTML pages
+        if: steps.changed.outputs.no_html != 'true'
+        env:
+          ORIGINAL_SUBMITTER: ${{ github.event.pull_request.user.login }}
+        run: |
+          xargs -r -a changed-html.txt python3 scripts/tag-submitter.py --submitter "$ORIGINAL_SUBMITTER"
 
       - name: Ensure tracking snippet in HTML pages
         run: python3 scripts/ensure-tracking.py
