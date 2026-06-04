@@ -944,7 +944,7 @@
 <!-- smec-favicon v1 -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- smec-accuracy v1 -->
-<meta name="smec:last-accuracy-check" content="2026-04-23">
+<meta name="smec:last-accuracy-check" content="2026-06-04">
 <style>/* smec-back-btn v2 */
 .smec-back-btn { position: fixed; bottom: 16px; left: 16px; z-index: 9999;
   box-sizing: border-box;
@@ -1175,7 +1175,7 @@
                 <h4>Storage Format</h4>
                 <ul>
                   <li>Delta tables (recommended)</li>
-                  <li>V-Order optimization enabled</li>
+                  <li>V-Order for read-heavy SQL/BI tables</li>
                   <li>Liquid Clustering preferred</li>
                   <li>OPTIMIZE &amp; VACUUM maintenance</li>
                 </ul>
@@ -1404,7 +1404,7 @@
       </div>
       <div class="tool-tile">
         <span class="tool-emoji">&#128065;</span>
-        <h4>Materialized Views</h4>
+        <h4>Materialized Lake Views</h4>
         <p>Declarative SQL transforms with auto-refresh and dependency management.</p>
       </div>
       <div class="tool-tile">
@@ -1541,7 +1541,7 @@
       <div class="practice-card">
         <div class="practice-number">06</div>
         <div class="practice-icon">&#9889;</div>
-        <h3>V-Order Everything</h3>
+        <h3>Use V-Order Selectively</h3>
         <p>V-Order is disabled by default in new Fabric workspaces. Enable it on Silver and Gold tables — especially those serving Power BI Direct Lake and SQL analytics endpoints — for significantly faster reads.</p>
       </div>
     </div>
