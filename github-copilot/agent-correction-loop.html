@@ -133,7 +133,7 @@
 <!-- smec-favicon v1 -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- smec-accuracy v1 -->
-<meta name="smec:last-accuracy-check" content="2026-04-30">
+<meta name="smec:last-accuracy-check" content="2026-06-04">
 <style>/* smec-back-btn v2 */
 .smec-back-btn { position: fixed; bottom: 16px; left: 16px; z-index: 9999;
   box-sizing: border-box;
@@ -203,7 +203,7 @@
   </div>
   <h1>When the agent's PR is wrong</h1>
   <p>Every async coding agent ships broken first drafts sometimes. The question is how you tell it to try again, which control plane owns the next round, and whether the review trail stays easy to reconstruct.</p>
-  <div class="hero-meta">Accurate as of April 30, 2026 · Focus: comment-driven iteration, not one-shot quality</div>
+  <div class="hero-meta">Accurate as of June 4, 2026 · Focus: comment-driven iteration, not one-shot quality</div>
 </header>
 
 <div class="container">
@@ -262,7 +262,7 @@
           <!-- Arrow 2→3 (right side, amber: run state varies) -->
           <line x1="640" y1="117" x2="640" y2="243" stroke="#9A6700" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
           <text x="730" y="176" text-anchor="end" font-size="11" font-weight="600" fill="#9A6700">run cost</text>
-          <text x="730" y="192" text-anchor="end" font-size="10" fill="#57606A">premium requests, minutes, tokens</text>
+          <text x="730" y="192" text-anchor="end" font-size="10" fill="#57606A">AI credits, minutes, tokens</text>
 
           <!-- Arrow 3→4 (bottom, green: commit goes to PR for all) -->
           <line x1="540" y1="284" x2="215" y2="284" stroke="#2DA44E" stroke-width="2.5" marker-end="url(#arrow-green)"/>
@@ -305,7 +305,7 @@
           <div class="loop-step"><div class="n">1</div><div class="t"><strong>Comment in the PR.</strong> <code>@copilot address the null-check on line 42</code>.</div></div>
           <div class="loop-step"><div class="n">2</div><div class="t"><strong>Agent wakes on the same branch.</strong> New commit pushed, same PR.</div></div>
           <div class="loop-step"><div class="n">3</div><div class="t"><strong>Review comments resolve inline.</strong> Standard GitHub review UI.</div></div>
-          <div class="loop-step pain"><div class="n">!</div><div class="t"><strong>Watch the limits.</strong> Runs can consume Actions minutes and Copilot premium requests, and content exclusions are not honored by the cloud agent.</div></div>
+          <div class="loop-step pain"><div class="n">!</div><div class="t"><strong>Watch the limits.</strong> Runs can consume Actions minutes and AI credits, and content exclusions are not honored by the cloud agent.</div></div>
         </div>
       </div>
 
@@ -375,7 +375,7 @@ as the fallback and add a test for the anonymous case.
         </h3>
         <ul>
           <li><strong>One routine surface.</strong> Reviewers should be able to give normal correction feedback without leaving the issue or PR.</li>
-          <li><strong>Visible iteration cost.</strong> Teams should know whether a "try again" consumes Copilot premium requests, Actions minutes, vendor tokens, or subscription quota.</li>
+          <li><strong>Visible iteration cost.</strong> Teams should know whether a "try again" consumes AI credits, Actions minutes, vendor tokens, or subscription quota.</li>
           <li><strong>State in the review trail.</strong> Future maintainers reading <code>git log</code> and PR comments should understand why the final patch looks the way it does.</li>
           <li><strong>Stop after 2-3 rounds.</strong> If it's still wrong, take over manually; iteration cost exceeds writing the fix.</li>
         </ul>
