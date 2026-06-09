@@ -31,6 +31,7 @@
       --c-azure-openai:         #5C2D91;
       --c-defender-for-cloud:   #00BCF2;
       --c-infrastructure:       #0078D4;
+      --c-conference-rollup:    #D83B01;
     }
 
     body {
@@ -254,6 +255,9 @@
 
     [data-category="infrastructure"]       .card-header { border-top: 3px solid var(--c-infrastructure); }
     [data-category="infrastructure"]       .card-icon   { background: var(--c-infrastructure); }
+
+    [data-category="conference-rollup"]    .card-header { border-top: 3px solid var(--c-conference-rollup); }
+    [data-category="conference-rollup"]    .card-icon   { background: var(--c-conference-rollup); }
 
     /* ─── Footer ────────────────────────────────────────────── */
     footer {
@@ -532,6 +536,13 @@
         <circle cx="6" cy="5.5" r="1" fill="#fff"/>
         <circle cx="6" cy="12.5" r="1" fill="#fff"/>
         <circle cx="6" cy="19.5" r="1" fill="#fff"/>
+      </svg>`,
+      "conference-rollup": `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="4" width="18" height="16" rx="2"/>
+        <path d="M7 2v4 M17 2v4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M3 9h18" stroke="#fff" stroke-width="2" fill="none"/>
+        <circle cx="9" cy="13" r="1.2" fill="#fff"/>
+        <path d="M12 13h5 M7.8 17h8.2" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
       </svg>`,
     };
 
