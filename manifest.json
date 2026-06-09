@@ -142,14 +142,5 @@
         "title": "Azure Arc: The Multi-Cloud Command Center"
       }
     ]
-  },
-  "conference-rollup": {
-    "displayName": "Conference Rollup",
-    "items": [
-      {
-        "file": "build-2026-announcements-infographic.html",
-        "title": "Microsoft Build 2026 — All Announcements by Category"
-      }
-    ]
   }
 }
