@@ -19,7 +19,8 @@ CATEGORIES = {
     "avd": "AVD",
     "app-platform-services": "App Platform Services",
     "defender-for-cloud": "Defender for Cloud",
-    "infrastructure": "Infrastructure"
+    "infrastructure": "Infrastructure",
+    "conference-rollup": "Conference Rollup"
 }
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
