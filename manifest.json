@@ -28,6 +28,10 @@
         "title": "Microsoft Fabric Governance Framework"
       },
       {
+        "file": "fabric-mcp-isv-scale-infographic.html",
+        "title": "Fabric Automation at Scale — The ISV Blueprint for Power BI & Fabric MCP, Skills & REST APIs"
+      },
+      {
         "file": "medallion-architecture-infographic.html",
         "title": "Medallion Lakehouse Architecture in Microsoft Fabric"
       },
