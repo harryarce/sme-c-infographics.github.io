@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Microsoft App, AI &amp; Data Stack — A Top-to-Bottom Map</title>
 <!-- smec-accuracy v1 -->
-<meta name="smec:last-accuracy-check" content="2026-05-14">
+<meta name="smec:last-accuracy-check" content="2026-06-18">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; font-size: 16px; }
@@ -679,7 +679,7 @@
             <li>Outlook &middot; Teams &middot; Word &middot; Excel &middot; PowerPoint</li>
             <li>Dynamics 365 &middot; Power Apps &middot; Power Automate &middot; Power Pages</li>
             <li>Custom apps on App Service / Container Apps / AKS</li>
-            <li>Powered by GPT-5, grounded via Microsoft Graph and Dataverse</li>
+            <li>Grounded via Microsoft Graph and Dataverse; powered by Azure OpenAI and Anthropic models</li>
           </ul>
         </div>
         <div class="next">
@@ -718,7 +718,7 @@
         <div>
           <h3>Where intelligence is built</h3>
           <div class="role">The model catalog, the gateway, and the lifecycle tools that turn raw LLMs into governed services.</div>
-          <p><strong>Microsoft Foundry</strong> (rebranded from Azure AI Foundry) gives you 1,900+ models &mdash; GPT-5.5, GPT-5.4 family, Mistral Large 3, Llama, Phi &mdash; with fine-tuning, evaluation, and observability. <strong>AI Gateway in Azure API Management</strong> is the front door: token-aware throttling, semantic caching, content safety, OAuth 2.1 for MCP, and PTU-first load balancing.</p>
+          <p><strong>Microsoft Foundry</strong> (rebranded from Azure AI Foundry) gives you 1,900+ models &mdash; GPT-5.5, GPT-5.4 family, Mistral Medium 3, Llama, Phi &mdash; with fine-tuning, evaluation, and observability. <strong>AI Gateway in Azure API Management</strong> is the front door: token-aware throttling, semantic caching, content safety, OAuth 2.1 for MCP, and PTU-first load balancing.</p>
           <ul class="examples">
             <li>Microsoft Foundry &middot; Foundry Tools (Azure AI Services)</li>
             <li><!-- smec-keep-term -->Azure OpenAI Service<!-- /smec-keep-term --> (migration to Foundry recommended)</li>
@@ -745,7 +745,7 @@
             <li>Microsoft Fabric &middot; OneLake (the OneDrive for data)</li>
             <li>Power BI &middot; semantic models &middot; verified answers</li>
             <li>Azure AI Search &middot; vector + semantic + hybrid retrieval</li>
-            <li>Foundry IQ &middot; Fabric IQ &middot; Work IQ (Public Preview)</li>
+            <li>Foundry IQ (partial GA) &middot; Fabric IQ &middot; Work IQ (Preview)</li>
           </ul>
         </div>
         <div class="next">
@@ -977,7 +977,7 @@
       <details class="gl" data-cat="agent">
         <summary><span class="term-cat">Agent</span> A2A (Agent2Agent)</summary>
         <div class="body">
-          Microsoft's protocol for agent-to-agent communication, letting multiple agents collaborate on a single workflow. Currently in preview as part of the March 2026 APIM AI Gateway release.
+          An open standard for agent-to-agent communication, letting multiple agents collaborate on a single workflow. Developed by Google and adopted by Microsoft as a supported open protocol. Currently in preview in Foundry Agent Service and APIM.
           <div class="where">See: <a href="ai-gateway-apim.html">AI Gateway in APIM</a> (timeline section)</div>
         </div>
       </details>
@@ -1017,7 +1017,7 @@
       <details class="gl" data-cat="data">
         <summary><span class="term-cat">Data</span> Foundry IQ</summary>
         <div class="body">
-          The retrieval layer for AI Foundry &mdash; multi-source grounding, indexing, and reranking under one API. Public Preview at time of writing.
+          The retrieval layer for AI Foundry &mdash; multi-source grounding, indexing, and reranking under one API. Some features are generally available; others remain in preview.
           <div class="where">See: <a href="microsoft-iq-platforms-guide.html">IQ Platforms Guide</a></div>
         </div>
       </details>
@@ -1041,7 +1041,7 @@
       <details class="gl" data-cat="platform">
         <summary><span class="term-cat">Platform</span> Microsoft Foundry</summary>
         <div class="body">
-          Microsoft's unified AI development platform (rebranded from Azure AI Foundry). 1,900+ models including GPT-5.5, GPT-5.4 family, Mistral Large 3, Llama, Phi. Fine-tuning, evaluation, observability, and the Agent Service all in one control plane.
+          Microsoft's unified AI development platform (rebranded from Azure AI Foundry). 1,900+ models including GPT-5.5, GPT-5.4 family, Mistral Medium 3, Llama, Phi. Fine-tuning, evaluation, observability, and the Agent Service all in one control plane.
           <div class="where">Docs: <a href="https://learn.microsoft.com/en-us/azure/ai-foundry/" target="_blank">Microsoft Foundry</a></div>
         </div>
       </details>
